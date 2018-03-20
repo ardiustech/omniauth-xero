@@ -17,6 +17,7 @@ module OmniAuth
         {
           :first_name => raw_info["FirstName"],
           :last_name  => raw_info["LastName"],
+          :email => raw_info['EmailAddress'],
         }
       end
 
@@ -29,7 +30,7 @@ module OmniAuth
       private
 
       def raw_info
-        @raw_info ||= users.find { |user| user["IsSubscriber"] }
+        @raw_info ||= users.size == 1 ? users.first : users.find { |user| user["IsSubscriber"] }
       end
 
       def users
