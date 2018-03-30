@@ -30,7 +30,11 @@ module OmniAuth
       private
 
       def raw_info
-        @raw_info ||= users.size == 1 ? users.first : users.find { |user| user["IsSubscriber"] }
+        # Xero doesn't tell you who logged-in so you can't pick out a user from the list
+        # to match to the one who just authenticated via Xero for your App. The only unambiguous case
+        # is when the list of users is a singleton. We require 100% accuracy here so when it is ambiguous
+        # we don't give any info via raw_info.
+        @raw_info ||= users.size == 1 ? users.first : {}
       end
 
       def users
